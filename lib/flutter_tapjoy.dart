@@ -139,6 +139,7 @@ class TapJoyPlugin {
 
   /// constructor method
   TapJoyPlugin() {
+    print("COURTNEY'S PACKAGE");
     _channel.setMethodCallHandler(_handleMethod);
   }
 
