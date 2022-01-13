@@ -7,10 +7,13 @@ FlutterViewController* flutterViewController;
     NSDictionary *placements;
 
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
+  NSLog(@"-----------------test123");
   FlutterMethodChannel* channel = [FlutterMethodChannel
       methodChannelWithName:@"flutter_tapjoy"
             binaryMessenger:[registrar messenger]];
     FlutterTapjoyPlugin* instance = [[FlutterTapjoyPlugin alloc] init];
+    
+    tapJoyChannel = channel;
     
   [registrar addMethodCallDelegate:instance channel:channel];
     
@@ -29,6 +32,8 @@ FlutterViewController* flutterViewController;
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
     NSDictionary *dict = call.arguments;
     NSString *placementName = dict[@"placementName"];
+    NSLog(@"-----------------IN BEGINNING OF HANDLE METHOD CALL %@", call.method);
+
   if ([@"connectTapJoy" isEqualToString:call.method]) {
       NSString *apiKey = dict[@"iOSApiKey"];
       NSNumber *methodDebug = dict[@"debug"];
@@ -48,14 +53,18 @@ FlutterViewController* flutterViewController;
       [FlutterTapjoyPlugin addPlacement:placementName];
   } else if ([@"requestContent" isEqualToString:call.method]) {
       TJPlacement *myPlacement = placements[placementName];
+      NSLog(@"-----------------requestContent... ");
       if (myPlacement) {
+          NSLog(@"-----------------requestContent... sucess");
           [myPlacement requestContent];
       } else {
+          NSLog(@"-----------------requestContent... fail");
           NSDictionary *args;
           args = @{ @"error" : @"Placement Not Found, Please Add placement first",@"placementName":placementName};
           [tapJoyChannel invokeMethod:@"requestFail" arguments:args];
       }
   } else if ([@"showPlacement" isEqualToString:call.method]) {
+      NSLog(@"-----------------showPlacement... fail");
       TJPlacement *myPlacement = placements[placementName];
       [myPlacement showContentWithViewController:flutterViewController];
   } else if ([@"getCurrencyBalance" isEqualToString:call.method]) {
@@ -155,12 +164,14 @@ FlutterViewController* flutterViewController;
 
 // Called when the content is showed.
 + (void)contentDidAppear:(TJPlacement*)placement{
+    NSLog(@"-----------------CALLING CONTENT DID APPEAR");
     NSDictionary *args = @{ @"placementName" : placement.placementName};
     [tapJoyChannel invokeMethod:@"contentDidAppear" arguments:args];
 }
 
 // Called when the content is dismissed.
 + (void)contentDidDisappear:(TJPlacement*)placement{
+    NSLog(@"-----------------CALLING CONTENT DID DISSAPEAR");
     NSDictionary *args = @{ @"placementName" : placement.placementName};
     [tapJoyChannel invokeMethod:@"contentDidDisAppear" arguments:args];
 }

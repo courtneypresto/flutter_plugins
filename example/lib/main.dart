@@ -11,108 +11,100 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  TJPlacement myPlacement = TJPlacement(name: "LevelComplete");
-  TJPlacement myPlacement2 = TJPlacement(name: "Placement02");
+  TJPlacement myPlacement = TJPlacement(name: "EarnVibesExplicitTap");
+  TJPlacement myPlacement2 = TJPlacement(name: "EarnVibesExplicitTap");
   String contentStateText = "";
   String connectionState = "";
   String iOSATTAuthResult = "";
   String balance = "";
+
   @override
   void initState() {
     super.initState();
     // set connection result handler
     TapJoyPlugin.shared.setConnectionResultHandler(_connectionResultHandler());
+
     // connect to TapJoy, all fields are required.
     TapJoyPlugin.shared.connect(
-        androidApiKey: "tap_joy_android_api_key",
-        iOSApiKey: "tap_joy_ios_api_key",
+        androidApiKey:
+            "-on6Xz0bSaKLDvf163pC9gECxq9XnLVHKoooCjFKCJfYlYcRpsFtEK0siOLu",
+        iOSApiKey:
+            "oLH6Lxq_SDOQoL9o3gnk9gEBWIrGDDO3ZD43ouLGMmhdBqW2YCw_U7t8ojBe",
         debug: true);
+
     // set userID
     TapJoyPlugin.shared.setUserID(userID: "user_id123");
+
     // set contentState handler for each placement
     myPlacement.setHandler(_placementHandler());
     myPlacement2.setHandler(_placementHandler());
+
     // add placements.
     TapJoyPlugin.shared.addPlacement(myPlacement);
     TapJoyPlugin.shared.addPlacement(myPlacement2);
-    // set currency Handlers
-    TapJoyPlugin.shared.setGetCurrencyBalanceHandler(_currencyHandler());
-    TapJoyPlugin.shared.setAwardCurrencyHandler(_currencyHandler());
-    TapJoyPlugin.shared.setSpendCurrencyHandler(_currencyHandler());
-    TapJoyPlugin.shared.setEarnedCurrencyAlertHandler(_currencyHandler());
   }
 
 // currency handler
-  TJSpendCurrencyHandler _currencyHandler() {
-    TJSpendCurrencyHandler handler = (currencyName, amount, error) {
-      setState(() {
-        balance = "Currency Name: " +
-            currencyName.toString() +
-            " Amount:  " +
-            amount.toString() +
-            " Error:" +
-            error.toString();
-      });
-    };
-    return handler;
+  handler2(result) {
+    print("INSIDE CONNECTION STATE");
+    switch (result) {
+      case TJConnectionResult.connected:
+        setState(() {
+          connectionState = "Connected";
+        });
+        break;
+      case TJConnectionResult.disconnected:
+        setState(() {
+          connectionState = "Disconnected";
+        });
+        break;
+    }
   }
 
   // connection result handler
   TJConnectionResultHandler _connectionResultHandler() {
-    TJConnectionResultHandler handler = (result) {
-      switch (result) {
-        case TJConnectionResult.connected:
-          setState(() {
-            connectionState = "Connected";
-          });
-          break;
-        case TJConnectionResult.disconnected:
-          setState(() {
-            connectionState = "Disconnected";
-          });
-          break;
-      }
-    };
-    return handler;
+    return handler2;
+  }
+
+  void handler(contentState, name, error) {
+    print("INSIDE CONTENT STATE");
+    switch (contentState) {
+      case TJContentState.contentReady:
+        setState(() {
+          contentStateText = "Content Ready for placement :  $name";
+        });
+        break;
+      case TJContentState.contentDidAppear:
+        setState(() {
+          contentStateText = "Content Did Appear for placement :  $name";
+        });
+        break;
+      case TJContentState.contentDidDisappear:
+        setState(() {
+          contentStateText = "Content Did Disappear for placement :  $name";
+        });
+        break;
+      case TJContentState.contentRequestSuccess:
+        setState(() {
+          contentStateText = "Content Request Success for placement :  $name";
+        });
+        break;
+      case TJContentState.contentRequestFail:
+        setState(() {
+          contentStateText =
+              "Content Request Fail + $error for placement :  $name";
+        });
+        break;
+      case TJContentState.userClickedAndroidOnly:
+        setState(() {
+          contentStateText = "Content User Clicked for placement :  $name";
+        });
+        break;
+    }
   }
 
   // placement Handler
   TJPlacementHandler _placementHandler() {
-    TJPlacementHandler handler = (contentState, name, error) {
-      switch (contentState) {
-        case TJContentState.contentReady:
-          setState(() {
-            contentStateText = "Content Ready for placement :  $name";
-          });
-          break;
-        case TJContentState.contentDidAppear:
-          setState(() {
-            contentStateText = "Content Did Appear for placement :  $name";
-          });
-          break;
-        case TJContentState.contentDidDisappear:
-          setState(() {
-            contentStateText = "Content Did Disappear for placement :  $name";
-          });
-          break;
-        case TJContentState.contentRequestSuccess:
-          setState(() {
-            contentStateText = "Content Request Success for placement :  $name";
-          });
-          break;
-        case TJContentState.contentRequestFail:
-          setState(() {
-            contentStateText =
-                "Content Request Fail + $error for placement :  $name";
-          });
-          break;
-        case TJContentState.userClickedAndroidOnly:
-          setState(() {
-            contentStateText = "Content User Clicked for placement :  $name";
-          });
-          break;
-      }
-    };
     return handler;
   }
 
@@ -191,23 +183,6 @@ class _MyAppState extends State<MyApp> {
                 child: Text("show Placement 002"),
                 onPressed: myPlacement2.showPlacement,
               ),
-              ElevatedButton(
-                child: Text("get balance"),
-                onPressed: TapJoyPlugin.shared.getCurrencyBalance,
-              ),
-              ElevatedButton(
-                child: Text("award balance"),
-                onPressed: () {
-                  TapJoyPlugin.shared.awardCurrency(15);
-                },
-              ),
-              ElevatedButton(
-                child: Text("spend balance"),
-                onPressed: () {
-                  TapJoyPlugin.shared.spendCurrency(5);
-                },
-              ),
-              Text("Balance Response : $balance"),
             ],
           ),
         ),

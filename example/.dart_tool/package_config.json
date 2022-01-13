@@ -56,6 +56,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "flutter_lints",
+      "rootUri": "file:///Users/owner/Developer/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_lints-1.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "flutter_tapjoy",
       "rootUri": "../../",
       "packageUri": "lib/",
@@ -64,6 +70,12 @@
     {
       "name": "flutter_test",
       "rootUri": "file:///Users/owner/Developer/flutter/flutter/packages/flutter_test",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "lints",
+      "rootUri": "file:///Users/owner/Developer/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/lints-1.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -140,13 +152,13 @@
       "languageVersion": "2.12"
     },
     {
-      "name": "flutter_tapjoy_example",
+      "name": "example",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "2.7"
     }
   ],
-  "generated": "2022-01-10T22:38:22.342237Z",
+  "generated": "2022-01-12T23:22:26.145413Z",
   "generator": "pub",
   "generatorVersion": "2.14.4"
 }

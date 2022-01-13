@@ -1,6 +1,6 @@
-# flutter_tapjoy_example
+# example
 
-Demonstrates how to use the flutter_tapjoy plugin.
+A new Flutter project.
 
 ## Getting Started
 

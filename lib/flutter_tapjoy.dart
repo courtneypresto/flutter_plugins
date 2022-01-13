@@ -144,6 +144,7 @@ class TapJoyPlugin {
     print("CALLING COURTNEY'S CODE");
 
     _channel.setMethodCallHandler(_handleMethod);
+  
   }
 
   /// connect to TapJoy, all fields @required.
