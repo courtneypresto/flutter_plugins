@@ -15,6 +15,7 @@ enum TJContentState {
   contentRequestSuccess,
   contentRequestFail,
   userClickedAndroidOnly,
+  requestShowFail,
 }
 
 /// iOS App Tracking Authentication Result enums for getIOSATTAuth
@@ -144,7 +145,6 @@ class TapJoyPlugin {
     print("CALLING COURTNEY'S CODE");
 
     _channel.setMethodCallHandler(_handleMethod);
-  
   }
 
   /// connect to TapJoy, all fields @required.
@@ -199,6 +199,18 @@ class TapJoyPlugin {
           if (tjPlacement._handler != null) {
             tjPlacement._handler(
                 TJContentState.contentRequestSuccess, placementName, null);
+          } else {}
+        }
+        break;
+      case 'requestShowFail':
+        String placementName = call.arguments["placementName"];
+        TJPlacement tjPlacement = placements
+            .firstWhereOrNull((element) => element.name == placementName);
+        String error = call.arguments["error"];
+        if (tjPlacement != null) {
+          if (tjPlacement._handler != null) {
+            tjPlacement._handler(
+                TJContentState.requestShowFail, placementName, error);
           } else {}
         }
         break;

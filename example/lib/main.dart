@@ -69,6 +69,9 @@ class _MyAppState extends State<MyApp> {
   void handler(contentState, name, error) {
     print("INSIDE CONTENT STATE");
     switch (contentState) {
+      case TJContentState.requestShowFail:
+        print("FAILLLEEEEDDDDDD");
+        break;
       case TJContentState.contentReady:
         setState(() {
           contentStateText = "Content Ready for placement :  $name";

@@ -67,6 +67,9 @@ FlutterViewController* flutterViewController;
       NSLog(@"-----------------showPlacement... fail");
       TJPlacement *myPlacement = placements[placementName];
       [myPlacement showContentWithViewController:flutterViewController];
+       NSDictionary *args;
+       args = @{ @"error" : @"Placement Not Found, Please Add placement first",@"placementName":placementName};
+       [tapJoyChannel invokeMethod:@"requestShowFail" arguments:args];
   } else if ([@"getCurrencyBalance" isEqualToString:call.method]) {
       [Tapjoy getCurrencyBalanceWithCompletion: ^ (NSDictionary * parameters, NSError * error) {
           NSDictionary *args;
