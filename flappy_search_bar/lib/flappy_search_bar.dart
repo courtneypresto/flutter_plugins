@@ -59,8 +59,7 @@ class SearchBarController<T> {
         onCancel: () => {},
       );
 
-      final List<T> items =
-          await (_cancelableOperation!.value as FutureOr<List<T>>);
+      List<T> items = await (_cancelableOperation!.value);
       _lastSearchFunction = onSearch;
       _lastSearchedText = text;
       _list.clear();
@@ -77,7 +76,7 @@ class SearchBarController<T> {
   }
 
   void injectSearch(
-      String searchText, Future<List<T>> Function(String? text) onSearch) {
+      String? searchText, Future<List<T>> Function(String? text) onSearch) {
     if (searchText != null && searchText.length >= minimumChars) {
       _searchQueryController.text = searchText;
       _search(searchText, onSearch);
@@ -306,14 +305,15 @@ class _SearchBarState<T> extends State<SearchBar<T?>>
     });
   }
 
-  _onTextChanged(String newText) async {
+  _onTextChanged(String? newText) async {
     if (_debounce?.isActive ?? false) {
       _debounce!.cancel();
     }
 
     _debounce = Timer(widget.debounceDuration, () async {
-      if (newText.length >= widget.minimumChars && widget.onSearch != null) {
-        searchBarController._search(newText, widget.onSearch);
+      if ((newText?.length ?? 0) >= widget.minimumChars &&
+          widget.onSearch != null) {
+        searchBarController._search(newText!, widget.onSearch);
       } else {
         setState(() {
           _list.clear();
@@ -366,17 +366,26 @@ class _SearchBarState<T> extends State<SearchBar<T?>>
   }
 
   Widget? _buildContent(BuildContext context) {
+    //if the error is not null...
     if (_error != null) {
       return _error;
-    } else if (_loading) {
+    }
+    //if loading...
+    else if (_loading) {
       return widget.loader;
-    } else if (_searchQueryController.text.length < widget.minimumChars) {
+    }
+    // if the search controll is less than the minimum chars
+    else if (_searchQueryController.text.length < widget.minimumChars) {
       if (widget.placeHolder != null) return widget.placeHolder;
       return _buildListView(
           widget.suggestions, widget.buildSuggestion ?? widget.onItemFound);
-    } else if (_list.isNotEmpty) {
+    }
+    //if the list is not empty
+    else if (_list.isNotEmpty) {
       return _buildListView(_list, widget.onItemFound);
-    } else {
+    }
+    //final return emty widget
+    else {
       return widget.emptyWidget;
     }
   }
