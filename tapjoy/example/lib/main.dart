@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter_tapjoy/flutter_tapjoy.dart';
 
@@ -165,25 +167,25 @@ class _MyAppState extends State<MyApp> {
             children: [
               Text("Connection State : $connectionState"),
               ElevatedButton(
-                child: Text("get iOS App Tracking Auth"),
+                child: const Text("get iOS App Tracking Auth"),
                 onPressed: getAuth,
               ),
               Text("IOS Auth Result : $iOSATTAuthResult"),
               ElevatedButton(
-                child: Text("request content for Placement 001"),
+                child: const Text("request content for Placement 001"),
                 onPressed: myPlacement.requestContent,
               ),
               ElevatedButton(
-                child: Text("request content for Placement 002"),
+                child: const Text("request content for Placement 002"),
                 onPressed: myPlacement2.requestContent,
               ),
               Text("Content State : $contentStateText"),
               ElevatedButton(
-                child: Text("show Placement 001"),
+                child: const Text("show Placement 001"),
                 onPressed: myPlacement.showPlacement,
               ),
               ElevatedButton(
-                child: Text("show Placement 002"),
+                child: const Text("show Placement 002"),
                 onPressed: myPlacement2.showPlacement,
               ),
             ],
