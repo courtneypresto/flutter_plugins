@@ -97,6 +97,7 @@ public class FlutterTapjoyPlugin implements FlutterPlugin, MethodCallHandler, Ac
           @Override
           public void onRequestFailure(TJPlacement tjPlacement, TJError tjError) {
             final Hashtable<String, Object> myMap = new Hashtable<String, Object>();
+            // print(tjError.message);
             myMap.put("placementName",tjPlacement.getName());
             myMap.put("error",tjError.message);
               invokeMethod("requestFail",myMap);
