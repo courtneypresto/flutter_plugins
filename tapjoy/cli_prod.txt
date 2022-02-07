@@ -1,0 +1,4 @@
+sudo chown -R `whoami` /usr/local/Homebrew/;
+sudo chown -R $(whoami) $(brew --prefix)/*;
+sudo mkdir /usr/local/Frameworks;
+sudo chown -R `whoami` /usr/local/Frameworks/
