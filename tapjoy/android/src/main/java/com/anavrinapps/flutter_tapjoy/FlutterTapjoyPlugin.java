@@ -39,8 +39,8 @@ public class FlutterTapjoyPlugin implements FlutterPlugin, MethodCallHandler, Ac
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
     channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "flutter_tapjoy");
-    channel.setMethodCallHandler(this);
     context = flutterPluginBinding.getApplicationContext();
+    channel.setMethodCallHandler(this);
 
   }
 
@@ -54,26 +54,27 @@ public class FlutterTapjoyPlugin implements FlutterPlugin, MethodCallHandler, Ac
         Hashtable<String, Object> connectFlags = new Hashtable<String, Object>();
         connectFlags.put(TapjoyConnectFlag.ENABLE_LOGGING, "true");
         Tapjoy.setDebugEnabled(debug);
+
         boolean resulti = Tapjoy.connect(context, tapjoySDKKey, connectFlags, new TJConnectListener() {
           @Override
           public void onConnectSuccess() {
-
-            channel.invokeMethod("connectionSuccess",null);
+            channel.invokeMethod("connectionSuccess", null);
           }
 
           @Override
           public void onConnectFailure() {
-            channel.invokeMethod("connectionFail",null);
+            channel.invokeMethod("connectionFail", null);
           }
         });
+
         result.success(resulti);
         Tapjoy.setEarnedCurrencyListener(new TJEarnedCurrencyListener() {
           @Override
           public void onEarnedCurrency(String currencyName, int amount) {
             Hashtable<String, Object> getCurrencyResponse = new Hashtable<String, Object>();
-              getCurrencyResponse.put("currencyName",currencyName);
-              getCurrencyResponse.put("earnedAmount",amount);
-              invokeMethod("onEarnedCurrency",getCurrencyResponse);
+            getCurrencyResponse.put("currencyName", currencyName);
+            getCurrencyResponse.put("earnedAmount", amount);
+            invokeMethod("onEarnedCurrency", getCurrencyResponse);
           }
         });
         break;
@@ -90,38 +91,38 @@ public class FlutterTapjoyPlugin implements FlutterPlugin, MethodCallHandler, Ac
           @Override
           public void onRequestSuccess(final TJPlacement tjPlacement) {
             final Hashtable<String, Object> myMap = new Hashtable<String, Object>();
-            myMap.put("placementName",tjPlacement.getName());
-             invokeMethod("requestSuccess",myMap);
+            myMap.put("placementName", tjPlacement.getName());
+            invokeMethod("requestSuccess", myMap);
           }
 
           @Override
           public void onRequestFailure(TJPlacement tjPlacement, TJError tjError) {
             final Hashtable<String, Object> myMap = new Hashtable<String, Object>();
             // print(tjError.message);
-            myMap.put("placementName",tjPlacement.getName());
-            myMap.put("error",tjError.message);
-              invokeMethod("requestFail",myMap);
+            myMap.put("placementName", tjPlacement.getName());
+            myMap.put("error", tjError.message);
+            invokeMethod("requestFail", myMap);
           }
 
           @Override
           public void onContentReady(TJPlacement tjPlacement) {
             final Hashtable<String, Object> myMap = new Hashtable<String, Object>();
-            myMap.put("placementName",tjPlacement.getName());
-              invokeMethod("contentReady",myMap);
+            myMap.put("placementName", tjPlacement.getName());
+            invokeMethod("contentReady", myMap);
           }
 
           @Override
           public void onContentShow(TJPlacement tjPlacement) {
             final Hashtable<String, Object> myMap = new Hashtable<String, Object>();
-            myMap.put("placementName",tjPlacement.getName());
-            invokeMethod("contentDidAppear",myMap);
+            myMap.put("placementName", tjPlacement.getName());
+            invokeMethod("contentDidAppear", myMap);
           }
 
           @Override
           public void onContentDismiss(TJPlacement tjPlacement) {
             final Hashtable<String, Object> myMap = new Hashtable<String, Object>();
-            myMap.put("placementName",tjPlacement.getName());
-           invokeMethod("contentDidDisAppear",myMap);
+            myMap.put("placementName", tjPlacement.getName());
+            invokeMethod("contentDidDisAppear", myMap);
 
           }
 
@@ -138,12 +139,12 @@ public class FlutterTapjoyPlugin implements FlutterPlugin, MethodCallHandler, Ac
           @Override
           public void onClick(TJPlacement tjPlacement) {
             final Hashtable<String, Object> myMap = new Hashtable<String, Object>();
-            myMap.put("placementName",tjPlacement.getName());
-           invokeMethod("clicked",myMap);
+            myMap.put("placementName", tjPlacement.getName());
+            invokeMethod("clicked", myMap);
           }
         };
         TJPlacement p = Tapjoy.getPlacement(placementName, placementListener);
-        placements.put(placementName,p);
+        placements.put(placementName, p);
         result.success(p.isContentAvailable());
         break;
       case "requestContent":
@@ -153,9 +154,9 @@ public class FlutterTapjoyPlugin implements FlutterPlugin, MethodCallHandler, Ac
           tjPlacementRequest.requestContent();
         } else {
           final Hashtable<String, Object> myMap = new Hashtable<String, Object>();
-          myMap.put("placementName",placementNameRequest);
-          myMap.put("error","Placement Not Found, Please Add placement first");
-          invokeMethod("requestFail",myMap);
+          myMap.put("placementName", placementNameRequest);
+          myMap.put("error", "Placement Not Found, Please Add placement first");
+          invokeMethod("requestFail", myMap);
         }
         break;
       case "showPlacement":
@@ -165,19 +166,21 @@ public class FlutterTapjoyPlugin implements FlutterPlugin, MethodCallHandler, Ac
         tjPlacementShow.showContent();
         break;
       case "getCurrencyBalance":
-        Tapjoy.getCurrencyBalance(new TJGetCurrencyBalanceListener(){
+        Tapjoy.getCurrencyBalance(new TJGetCurrencyBalanceListener() {
           Hashtable<String, Object> getCurrencyResponse = new Hashtable<String, Object>();
+
           @Override
           public void onGetCurrencyBalanceResponse(String currencyName, int balance) {
-            getCurrencyResponse.put("currencyName",currencyName);
-            getCurrencyResponse.put("balance",balance);
-            invokeMethod("onGetCurrencyBalanceResponse",getCurrencyResponse);
+            getCurrencyResponse.put("currencyName", currencyName);
+            getCurrencyResponse.put("balance", balance);
+            invokeMethod("onGetCurrencyBalanceResponse", getCurrencyResponse);
           }
+
           @Override
           public void onGetCurrencyBalanceResponseFailure(String error) {
-              getCurrencyResponse.put("error",error);
-              invokeMethod("onGetCurrencyBalanceResponse",getCurrencyResponse);
-            }
+            getCurrencyResponse.put("error", error);
+            invokeMethod("onGetCurrencyBalanceResponse", getCurrencyResponse);
+          }
         });
 
         break;
@@ -185,17 +188,18 @@ public class FlutterTapjoyPlugin implements FlutterPlugin, MethodCallHandler, Ac
         final int myAmountInt = call.argument("amount");
         Tapjoy.spendCurrency(myAmountInt, new TJSpendCurrencyListener() {
           Hashtable<String, Object> spendCurrencyResponse = new Hashtable<String, Object>();
+
           @Override
           public void onSpendCurrencyResponse(String currencyName, int balance) {
-            spendCurrencyResponse.put("currencyName",currencyName);
-            spendCurrencyResponse.put("balance",balance);
-            invokeMethod("onSpendCurrencyResponse",spendCurrencyResponse);
+            spendCurrencyResponse.put("currencyName", currencyName);
+            spendCurrencyResponse.put("balance", balance);
+            invokeMethod("onSpendCurrencyResponse", spendCurrencyResponse);
           }
 
           @Override
           public void onSpendCurrencyResponseFailure(String error) {
-            spendCurrencyResponse.put("error",error);
-            invokeMethod("onSpendCurrencyResponse",spendCurrencyResponse);
+            spendCurrencyResponse.put("error", error);
+            invokeMethod("onSpendCurrencyResponse", spendCurrencyResponse);
           }
         });
 
@@ -205,17 +209,18 @@ public class FlutterTapjoyPlugin implements FlutterPlugin, MethodCallHandler, Ac
         final int myAmountIntAward = call.argument("amount");
         Tapjoy.awardCurrency(myAmountIntAward, new TJAwardCurrencyListener() {
           Hashtable<String, Object> awardCurrencyResponse = new Hashtable<String, Object>();
+
           @Override
           public void onAwardCurrencyResponse(String currencyName, int balance) {
-            awardCurrencyResponse.put("currencyName",currencyName);
-            awardCurrencyResponse.put("balance",balance);
-            invokeMethod("onAwardCurrencyResponse",awardCurrencyResponse);
+            awardCurrencyResponse.put("currencyName", currencyName);
+            awardCurrencyResponse.put("balance", balance);
+            invokeMethod("onAwardCurrencyResponse", awardCurrencyResponse);
           }
 
           @Override
           public void onAwardCurrencyResponseFailure(String error) {
-            awardCurrencyResponse.put("error",error);
-            invokeMethod("onAwardCurrencyResponse",awardCurrencyResponse);
+            awardCurrencyResponse.put("error", error);
+            invokeMethod("onAwardCurrencyResponse", awardCurrencyResponse);
           }
         });
 
@@ -231,10 +236,9 @@ public class FlutterTapjoyPlugin implements FlutterPlugin, MethodCallHandler, Ac
   }
 
   @Override
-  public void onAttachedToActivity(@NonNull  ActivityPluginBinding binding) {
+  public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
     FlutterTapjoyPlugin.activity = binding.getActivity();
   }
-
 
   @Override
   public void onDetachedFromActivityForConfigChanges() {
@@ -242,24 +246,24 @@ public class FlutterTapjoyPlugin implements FlutterPlugin, MethodCallHandler, Ac
   }
 
   @Override
-  public void onReattachedToActivityForConfigChanges(@NonNull  ActivityPluginBinding binding) {
+  public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
     FlutterTapjoyPlugin.activity = binding.getActivity();
   }
-
 
   @Override
   public void onDetachedFromActivity() {
 
   }
 
-  void invokeMethod(@NonNull final String methodName,final Hashtable<String,Object> data) {
+  void invokeMethod(@NonNull final String methodName, final Hashtable<String, Object> data) {
     try {
-      FlutterTapjoyPlugin.activity.runOnUiThread(new Runnable() {@Override
-      public void run() {
-        channel.invokeMethod(methodName,data);
-      }
+      FlutterTapjoyPlugin.activity.runOnUiThread(new Runnable() {
+        @Override
+        public void run() {
+          channel.invokeMethod(methodName, data);
+        }
       });
-    } catch(final Exception e) {
+    } catch (final Exception e) {
       Log.e("FlutterTapjoyPlugin", "Error " + e.toString());
     }
   }

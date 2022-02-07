@@ -34,7 +34,7 @@ android {
         disable 'InvalidPackage'
     }
      dependencies {
-        implementation 'com.tapjoy:tapjoy-android-sdk:12.9.0'
+        implementation 'com.tapjoy:tapjoy-android-sdk:12.7.1@aar'
         implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'
     }
 }

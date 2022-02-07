@@ -28,8 +28,8 @@ class _MyAppState extends State<MyApp> {
 
     // connect to TapJoy, all fields are required.
     TapJoyPlugin.shared.connect(
-        androidApiKey:
-            "-on6Xz0bSaKLDvf163pC9gECxq9XnLVHKoooCjFKCJfYlYcRpsFtEK0siOLu",
+        androidApiKey: 
+            "-on6Xz0bSaKLDvf163pC9gECxq9XnLVHKoooCjFKCJfYlYcRpsFtEK0siOLu", //test
         iOSApiKey:
             "oLH6Lxq_SDOQoL9o3gnk9gEBWIrGDDO3ZD43ouLGMmhdBqW2YCw_U7t8ojBe",
         debug: true);
