@@ -143,6 +143,7 @@ class TapJoyPlugin {
   TapJoyPlugin() {
     print("INSTANTIATING METHOD with: $_handleMethod");
     print("CALLING COURTNEY'S CODE");
+    print("INSTANTIATING PLUGIN WITH NEW ANDROID FIX");
 
     _channel.setMethodCallHandler(_handleMethod);
   }
