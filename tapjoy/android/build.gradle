@@ -37,4 +37,11 @@ android {
         implementation 'com.tapjoy:tapjoy-android-sdk:12.7.1@aar'
         implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'
     }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
 }
