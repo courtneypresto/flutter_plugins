@@ -13,8 +13,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  TJPlacement myPlacement = TJPlacement(name: "EarnVibesExplicitTap");
-  TJPlacement myPlacement2 = TJPlacement(name: "EarnVibesExplicitTap");
+  TJPlacement myPlacement = TJPlacement(name: "EarnVibesByWatchingAds");
+  // TJPlacement myPlacement2 = TJPlacement(name: "EarnVibesExplicitTap");
   String contentStateText = "";
   String connectionState = "";
   String iOSATTAuthResult = "";
@@ -39,11 +39,11 @@ class _MyAppState extends State<MyApp> {
 
     // set contentState handler for each placement
     myPlacement.setHandler(_placementHandler());
-    myPlacement2.setHandler(_placementHandler());
+    // myPlacement2.setHandler(_placementHandler());
 
     // add placements.
     TapJoyPlugin.shared.addPlacement(myPlacement);
-    TapJoyPlugin.shared.addPlacement(myPlacement2);
+    // TapJoyPlugin.shared.addPlacement(myPlacement2);
   }
 
 // currency handler
@@ -172,22 +172,22 @@ class _MyAppState extends State<MyApp> {
               ),
               Text("IOS Auth Result : $iOSATTAuthResult"),
               ElevatedButton(
-                child: const Text("request content for Placement 001"),
+                child: const Text("request content for EarnVibesExplicitTap"),
                 onPressed: myPlacement.requestContent,
               ),
-              ElevatedButton(
-                child: const Text("request content for Placement 002"),
-                onPressed: myPlacement2.requestContent,
-              ),
+              // ElevatedButton(
+              //   child: const Text("request content for Placement 002"),
+              //   onPressed: myPlacement2.requestContent,
+              // ),
               Text("Content State : $contentStateText"),
               ElevatedButton(
-                child: const Text("show Placement 001"),
+                child: const Text("show Content for: EarnVibesExplicitTap"),
                 onPressed: myPlacement.showPlacement,
               ),
-              ElevatedButton(
-                child: const Text("show Placement 002"),
-                onPressed: myPlacement2.showPlacement,
-              ),
+              // ElevatedButton(
+              //   child: const Text("show Placement 002"),
+              //   onPressed: myPlacement2.showPlacement,
+              // ),
             ],
           ),
         ),
