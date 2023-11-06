@@ -7,7 +7,7 @@ FlutterViewController* flutterViewController;
     NSDictionary *placements;
 
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
-  NSLog(@"-----------------test123");
+  NSLog(@"TAPJOY PLUGIN: test123");
   FlutterMethodChannel* channel = [FlutterMethodChannel
       methodChannelWithName:@"flutter_tapjoy"
             binaryMessenger:[registrar messenger]];
@@ -32,7 +32,7 @@ FlutterViewController* flutterViewController;
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
     NSDictionary *dict = call.arguments;
     NSString *placementName = dict[@"placementName"];
-    NSLog(@"-----------------IN BEGINNING OF HANDLE METHOD CALL %@", call.method);
+    NSLog(@"TAPJOY PLUGIN: IN BEGINNING OF HANDLE METHOD CALL %@", call.method);
 
   if ([@"connectTapJoy" isEqualToString:call.method]) {
       NSString *apiKey = dict[@"iOSApiKey"];
@@ -53,24 +53,39 @@ FlutterViewController* flutterViewController;
       [FlutterTapjoyPlugin addPlacement:placementName];
   } else if ([@"requestContent" isEqualToString:call.method]) {
       TJPlacement *myPlacement = placements[placementName];
-      NSLog(@"-----------------requestContent... ");
+      NSLog(@"TAPJOY PLUGIN: requestContent... ");
       if (myPlacement) {
-          NSLog(@"-----------------requestContent... sucess");
+          NSLog(@"TAPJOY PLUGIN: requestContent... sucess");
           [myPlacement requestContent];
       } else {
-          NSLog(@"-----------------requestContent... fail");
+          NSLog(@"TAPJOY PLUGIN: requestContent... fail");
           NSDictionary *args;
           args = @{ @"error" : @"Placement Not Found, Please Add placement first",@"placementName":placementName};
           [tapJoyChannel invokeMethod:@"requestFail" arguments:args];
       }
   } else if ([@"showPlacement" isEqualToString:call.method]) {
-      NSLog(@"-----------------showPlacement... fail");
-      TJPlacement *myPlacement = placements[placementName];
-      [myPlacement showContentWithViewController:flutterViewController];
-       NSDictionary *args;
-       args = @{ @"error" : @"Placement Not Found, Please Add placement first",@"placementName":placementName};
-       [tapJoyChannel invokeMethod:@"requestShowFail" arguments:args];
-  } else if ([@"getCurrencyBalance" isEqualToString:call.method]) {
+    NSLog(@"TAPJOY PLUGIN: calling showPlacement...");
+    
+    // Check if the placementName exists in the placements dictionary
+    TJPlacement *myPlacement = placements[placementName];
+    
+    if (myPlacement) {
+        // The placement exists, attempt to show the content
+        NSLog(@"TAPJOY PLUGIN: placement exists, attempting to show content...");
+        [myPlacement showContentWithViewController:flutterViewController];
+    } else {
+        // The placement doesn't exist, handle the error
+        NSLog(@"TAPJOY PLUGIN: placement does not exist, calling request show fail in flutter...");
+        NSDictionary *args = @{
+            @"error": @"Placement Not Found, Please Add placement first",
+            @"placementName": placementName
+        };
+        
+        // Notify the Flutter side about the error
+        [tapJoyChannel invokeMethod:@"requestShowFail" arguments:args];
+    }
+}
+ else if ([@"getCurrencyBalance" isEqualToString:call.method]) {
       [Tapjoy getCurrencyBalanceWithCompletion: ^ (NSDictionary * parameters, NSError * error) {
           NSDictionary *args;
           if (error) {
@@ -167,14 +182,14 @@ FlutterViewController* flutterViewController;
 
 // Called when the content is showed.
 + (void)contentDidAppear:(TJPlacement*)placement{
-    NSLog(@"-----------------CALLING CONTENT DID APPEAR");
+    NSLog(@"TAPJOY PLUGIN: CALLING CONTENT DID APPEAR");
     NSDictionary *args = @{ @"placementName" : placement.placementName};
     [tapJoyChannel invokeMethod:@"contentDidAppear" arguments:args];
 }
 
 // Called when the content is dismissed.
 + (void)contentDidDisappear:(TJPlacement*)placement{
-    NSLog(@"-----------------CALLING CONTENT DID DISSAPEAR");
+    NSLog(@"TAPJOY PLUGIN: CALLING CONTENT DID DISSAPEAR");
     NSDictionary *args = @{ @"placementName" : placement.placementName};
     [tapJoyChannel invokeMethod:@"contentDidDisAppear" arguments:args];
 }
